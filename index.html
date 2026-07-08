@@ -31,7 +31,7 @@
           <input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/AKfy.../exec" autocomplete="off" />
         </label>
         <label>Opérateur par défaut
-          <input id="defaultOperator" type="text" value="EL MEHDI BENCHELH" />
+          <input id="defaultOperator" type="text" placeholder="Optionnel" />
         </label>
       </div>
       <div class="actions">
@@ -70,10 +70,20 @@
             <input id="reportNo" name="reportNo" type="text" readonly />
           </label>
           <label>Code planning
-            <input id="planning" name="planning" type="text" value="00161PLDEM2025" />
+            <input id="planning" name="planning" type="text" placeholder="Ex: 00161PLDEM2025" />
           </label>
-          <label>Site
-            <input id="site" name="site" type="text" placeholder="Ex: PL DEM" />
+          <label>Centre
+            <select id="site" name="site">
+              <option value="">Choisir centre</option>
+              <option>FIGUIG</option>
+              <option>BOUARFA</option>
+              <option>TENDRARA</option>
+              <option>AINCHAIR</option>
+              <option>BOUANANE</option>
+              <option>AIN CHWATER</option>
+              <option>BENITADJIT</option>
+              <option>TALSINET</option>
+            </select>
           </label>
           <label>Date générale
             <input id="mainDate" name="mainDate" type="date" />
@@ -114,7 +124,7 @@
         </div>
         <div class="grid three compact">
           <label>Recherche
-            <input id="searchBox" type="search" placeholder="N°, site, opérateur..." />
+            <input id="searchBox" type="search" placeholder="N°, centre, opérateur..." />
           </label>
           <label>Filtrer par mois
             <input id="monthFilter" type="month" />

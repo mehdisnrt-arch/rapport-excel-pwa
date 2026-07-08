@@ -1,11 +1,11 @@
 'use strict';
 
-const LS_SETTINGS = 'rapport.excel.settings.v2.section.photos';
-const LS_REPORTS = 'rapport.excel.reports.v2.section.photos';
+const LS_SETTINGS = 'rapport.excel.settings.v4.final.centres';
+const LS_REPORTS = 'rapport.excel.reports.v4.final.centres';
 
 const DEFAULTS = {
   apiUrl: 'https://script.google.com/macros/s/AKfycbxI66qHAU91KW4YP0KjQqkiMFX8WbzQ3cRqXmASemOpcSV2HVi6OeeZoKA4qJFKSyI0sg/exec',
-  defaultOperator: 'EL MEHDI BENCHELH'
+  defaultOperator: ''
 };
 
 const SECTION_PHOTO_KEYS = ['tnt', 'fm', 'clim', 'energie'];
@@ -17,8 +17,8 @@ const SECTION_DEFS = [
     kind: 'tx',
     photoTitle: 'Photos TNT',
     rows: [
-      { service: 'Service1', fwdBefore: '50', refBefore: '1', tempBefore: '51', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '50', refAfter: '1', tempAfter: '51', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' },
-      { service: 'Service2', fwdBefore: '50', refBefore: '1', tempBefore: '48', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '50', refAfter: '1', tempAfter: '48', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' }
+      { service: 'Service1', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' },
+      { service: 'Service2', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' }
     ],
     interventions: [
       'Soufflage et dépoussiérage de l’ensemble des parties internes de l’équipement',
@@ -34,11 +34,11 @@ const SECTION_DEFS = [
     kind: 'tx',
     photoTitle: 'Photos FM',
     rows: [
-      { service: 'SNRT-MED6', fwdBefore: '403', refBefore: '1', tempBefore: '47', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '403', refAfter: '1', tempAfter: '47', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' },
-      { service: 'SNRT-Ojd', fwdBefore: '407', refBefore: '0', tempBefore: '42', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '407', refAfter: '0', tempAfter: '42', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' },
-      { service: 'SNRT-Int', fwdBefore: '434', refBefore: '0', tempBefore: '51', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '434', refAfter: '0', tempAfter: '51', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' },
-      { service: 'SNRT-Nat', fwdBefore: '407', refBefore: '1', tempBefore: '43', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '407', refAfter: '1', tempAfter: '43', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' },
-      { service: 'SNRT-Amz', fwdBefore: '397', refBefore: '0', tempBefore: '46', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '397', refAfter: '0', tempAfter: '46', alarmAfter: 'Non', typeAfter: '-', date: '', remarks: '-' }
+      { service: 'SNRT-MED6', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' },
+      { service: 'SNRT-Ojd', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' },
+      { service: 'SNRT-Int', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' },
+      { service: 'SNRT-Nat', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' },
+      { service: 'SNRT-Amz', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' }
     ],
     interventions: [
       'Soufflage et dépoussiérage de l’ensemble des parties internes de l’équipement',
@@ -54,7 +54,7 @@ const SECTION_DEFS = [
     kind: 'clim',
     photoTitle: 'Photos Climatisation',
     rows: [
-      { service: 'Climatiseur', on: 'Non', tempCons: '18', tempSalle: '24', alarm: '-', type: '-', date: '', remarks: '-' }
+      { service: 'Climatiseur', on: '', tempCons: '', tempSalle: '', alarm: '', type: '', date: '', remarks: '' }
     ],
     interventions: ['Contrôle visuel/auditif']
   },
@@ -64,7 +64,7 @@ const SECTION_DEFS = [
     kind: 'energie',
     photoTitle: 'Photos Energie',
     rows: [
-      { unite: 'GE 125KVA', marque: 'Jlm', puissance: '125KVA', uout: '', frequence: '', ubatterie: '', compteur: '', tempHuile: '', pressionHuile: '', date: '', remarks: '-' }
+      { unite: '', marque: '', puissance: '', uout: '', frequence: '', ubatterie: '', compteur: '', tempHuile: '', pressionHuile: '', date: '', remarks: '' }
     ],
     interventions: [
       'Contrôle visuel/auditif',
@@ -158,6 +158,43 @@ function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[ch]));
 }
 
+function setSelectValue(select, value) {
+  if (!select) return;
+  const val = String(value || '').trim();
+  if (val && !Array.from(select.options).some(opt => opt.value === val || opt.textContent === val)) {
+    select.appendChild(new Option(val, val));
+  }
+  select.value = val;
+}
+
+function hasText(value) {
+  return String(value ?? '').trim() !== '';
+}
+
+function photoSrc(photoObj) {
+  return photoObj?.dataUrl || photoObj?.url || '';
+}
+
+function photosHasData(photos) {
+  if (!photos) return false;
+  return Boolean(photos.beforeUrl || photos.afterUrl || photoSrc(photos.before) || photoSrc(photos.after));
+}
+
+function rowHasUsefulData(kind, row) {
+  if (!row) return false;
+  const ignored = kind === 'energie' ? [] : ['service'];
+  return Object.entries(row).some(([key, val]) => !ignored.includes(key) && hasText(val));
+}
+
+function visibleRows(section) {
+  const kind = section?.kind || '';
+  return (section?.rows || []).filter(row => rowHasUsefulData(kind, row));
+}
+
+function sectionHasData(section, photos) {
+  return visibleRows(section).length > 0 || photosHasData(photos);
+}
+
 function toast(node, msg, type = '') {
   node.textContent = msg;
   node.className = `status ${type}`.trim();
@@ -184,17 +221,17 @@ function buildEmptyReport() {
       title: def.title,
       kind: def.kind,
       photoTitle: def.photoTitle,
-      rows: clone(def.rows).map(row => ({ ...row, date: row.date ?? date })),
+      rows: clone(def.rows).map(row => ({ ...row, date: row.date ?? '' })),
       interventions: clone(def.interventions)
     };
   });
   return {
     uid: crypto.randomUUID ? crypto.randomUUID() : `uid-${Date.now()}-${Math.random().toString(16).slice(2)}`,
     reportNo: '',
-    planning: '00161PLDEM2025',
+    planning: '',
     site: '',
-    mainDate: date,
-    period: monthLabel(date),
+    mainDate: '',
+    period: '',
     operators: settings.defaultOperator || '',
     sections,
     photos: emptyPhotos(),
@@ -340,9 +377,9 @@ function climTableHtml(section) {
 function energyTableHtml(section) {
   const rows = (section.rows || []).map((row, i) => `
     <tr>
-      <td class="service-col">${inputCell(i, 'unite', row.unite || row.service || 'GE 125KVA', 'service-input')}</td>
-      <td>${inputCell(i, 'marque', row.marque || 'Jlm')}</td>
-      <td>${inputCell(i, 'puissance', row.puissance || '125KVA')}</td>
+      <td class="service-col">${inputCell(i, 'unite', row.unite || row.service || '', 'service-input')}</td>
+      <td>${inputCell(i, 'marque', row.marque || '')}</td>
+      <td>${inputCell(i, 'puissance', row.puissance || '')}</td>
       <td>${inputCell(i, 'uout', row.uout || '')}</td>
       <td>${inputCell(i, 'frequence', row.frequence || '')}</td>
       <td>${inputCell(i, 'ubatterie', row.ubatterie || '')}</td>
@@ -350,7 +387,7 @@ function energyTableHtml(section) {
       <td>${inputCell(i, 'tempHuile', row.tempHuile || '')}</td>
       <td>${inputCell(i, 'pressionHuile', row.pressionHuile || '')}</td>
       <td>${inputCell(i, 'date', row.date || '')}</td>
-      <td>${inputCell(i, 'remarks', row.remarks || '-', 'remark-input')}</td>
+      <td>${inputCell(i, 'remarks', row.remarks || '', 'remark-input')}</td>
     </tr>`).join('');
   return `
     <table class="excel-table energy-table">
@@ -386,10 +423,10 @@ function addRow(sectionRoot) {
   const d = $('#mainDate').value || todayIso();
   let rowHtml;
   if (kind === 'tx') {
-    const row = { service: '', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: 'Non', typeBefore: '-', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: 'Non', typeAfter: '-', date: d, remarks: '-' };
+    const row = { service: '', fwdBefore: '', refBefore: '', tempBefore: '', alarmBefore: '', typeBefore: '', fwdAfter: '', refAfter: '', tempAfter: '', alarmAfter: '', typeAfter: '', date: '', remarks: '' };
     rowHtml = txTableHtml({ rows: [row] }).match(/<tbody>([\s\S]*)<\/tbody>/)[1].replaceAll('data-row="0"', `data-row="${idx}"`);
   } else if (kind === 'clim') {
-    const row = { service: '', on: 'Non', tempCons: '', tempSalle: '', alarm: '-', type: '-', date: d, remarks: '-' };
+    const row = { service: '', on: '', tempCons: '', tempSalle: '', alarm: '', type: '', date: '', remarks: '' };
     rowHtml = climTableHtml({ rows: [row] }).match(/<tbody>([\s\S]*)<\/tbody>/)[1].replaceAll('data-row="0"', `data-row="${idx}"`);
   } else {
     return;
@@ -443,11 +480,11 @@ function fillForm(report) {
   sectionPhotos = clone(normalized.photos);
   $('#reportNo').value = normalized.reportNo || makeReportNo();
   $('#reportNoBadge').textContent = $('#reportNo').value;
-  $('#planning').value = normalized.planning || '00161PLDEM2025';
-  $('#site').value = normalized.site || '';
-  $('#mainDate').value = normalized.mainDate || todayIso();
-  $('#period').value = normalized.period || monthLabel($('#mainDate').value);
-  $('#operators').value = normalized.operators || settings.defaultOperator || '';
+  $('#planning').value = normalized.planning || '';
+  setSelectValue($('#site'), normalized.site || '');
+  $('#mainDate').value = normalized.mainDate || '';
+  $('#period').value = normalized.period || '';
+  $('#operators').value = normalized.operators || '';
   renderSections(normalized);
 }
 
@@ -526,7 +563,6 @@ async function onSubmit(event) {
   event.preventDefault();
   const status = $('#formStatus');
   const report = collectReportFromForm();
-  if (!report.mainDate) return toast(status, 'Date générale obligatoire.', 'err');
   if (!report.reportNo) report.reportNo = makeReportNo();
   upsertLocal(report);
   previewReport(report);
@@ -623,17 +659,17 @@ function normalizeReport(report) {
   // compatibilité énergie ancienne version
   if (r.sections.energie && r.sections.energie.rows) {
     r.sections.energie.rows = r.sections.energie.rows.map(row => ({
-      unite: row.unite || row.service || 'GE 125KVA',
-      marque: row.marque || 'Jlm',
-      puissance: row.puissance || '125KVA',
+      unite: row.unite || row.service || '',
+      marque: row.marque || '',
+      puissance: row.puissance || '',
       uout: row.uout || '',
       frequence: row.frequence || '',
       ubatterie: row.ubatterie || '',
       compteur: row.compteur || '',
       tempHuile: row.tempHuile || '',
       pressionHuile: row.pressionHuile || '',
-      date: row.date || r.mainDate || '',
-      remarks: row.remarks || '-'
+      date: row.date || '',
+      remarks: row.remarks || ''
     }));
   }
   return r;
@@ -657,11 +693,12 @@ function renderHistory() {
   list.innerHTML = filtered.map((r, idx) => `
     <article class="history-item">
       <h3><span>${escapeHtml(r.reportNo || 'Rapport')}</span>${r.sheetUrl ? `<a href="${escapeHtml(r.sheetUrl)}" target="_blank" rel="noopener">Ouvrir Google Sheet</a>` : ''}</h3>
-      <div class="history-meta"><span>${escapeHtml(formatDateFr(r.mainDate))}</span><span>${escapeHtml(r.site || 'Site vide')}</span><span>${escapeHtml(r.period || '')}</span><span>${escapeHtml(r.source || 'local')}</span></div>
+      <div class="history-meta"><span>${escapeHtml(formatDateFr(r.mainDate))}</span><span>${escapeHtml(r.site || 'Centre vide')}</span><span>${escapeHtml(r.period || '')}</span><span>${escapeHtml(r.source || 'local')}</span></div>
       <div class="actions small-actions">
         <button type="button" class="secondary" onclick="openHistoryReport(${idx})">Voir</button>
         <button type="button" class="ghost-dark" onclick="editHistoryReport(${idx})">Modifier</button>
         <button type="button" class="danger" onclick="deleteHistoryReport(${idx})">Supprimer local</button>
+        <button type="button" class="danger outline-danger" onclick="deleteHistoryReportDefinitive(${idx})">Supprimer définitif</button>
       </div>
     </article>`).join('');
   window.__filteredReports = filtered;
@@ -691,6 +728,31 @@ window.deleteHistoryReport = function(index) {
   updateStats();
 };
 
+window.deleteHistoryReportDefinitive = async function(index) {
+  const report = window.__filteredReports[index];
+  if (!report) return;
+  if (!settings.apiUrl) {
+    alert('Apps Script URL manquant. Ajoute le lien dans Configuration avant suppression définitive.');
+    return;
+  }
+  const label = report.reportNo || 'ce rapport';
+  if (!confirm(`Supprimer définitivement ${label} de Google Sheets + local ?`)) return;
+  try {
+    await postNoCors(settings.apiUrl, {
+      action: 'deleteReport',
+      payload: JSON.stringify({ uid: report.uid || '', reportNo: report.reportNo || '' })
+    });
+    reports = reports.filter(r => (r.uid || r.reportNo) !== (report.uid || report.reportNo));
+    saveJson(LS_REPORTS, reports);
+    renderHistory();
+    updateStats();
+    alert('Suppression envoyée. Le rapport sera supprimé de Google Sheets. Fais Sync pour vérifier.');
+    setTimeout(syncReports, 1500);
+  } catch (err) {
+    alert('Erreur suppression: ' + err.message);
+  }
+};
+
 function updateStats() {
   const nowMonth = todayIso().slice(0, 7);
   $('#statTotal').textContent = reports.length;
@@ -711,16 +773,20 @@ function reportHtml(report) {
     <h1 class="report-title">Rapport de Maintenance</h1>
     <table class="meta-table">
       <tr><td>N° Rapport</td><td>${escapeHtml(report.reportNo)}</td><td>Planning</td><td>${escapeHtml(report.planning)}</td></tr>
-      <tr><td>Site</td><td>${escapeHtml(report.site)}</td><td>Date</td><td>${escapeHtml(formatDateFr(report.mainDate))}</td></tr>
+      <tr><td>Centre</td><td>${escapeHtml(report.site)}</td><td>Date</td><td>${escapeHtml(formatDateFr(report.mainDate))}</td></tr>
       <tr><td>Période</td><td>${escapeHtml(report.period)}</td><td>Opérateurs</td><td>${escapeHtml(report.operators)}</td></tr>
     </table>
-    ${sections}
+    ${sections || '<p class="muted empty-report">Aucune partie remplie.</p>'}
   </article>`;
 }
 
 function sectionReportHtml(section, photos, def) {
-  const body = section.kind === 'tx' ? txReportHtml(section) : section.kind === 'clim' ? climReportHtml(section) : energyReportHtml(section);
-  return body + sectionPhotosReportHtml(photos, def.photoTitle || section.photoTitle || section.title);
+  const normalizedSection = { ...section, kind: def.kind, title: section.title || def.title };
+  if (!sectionHasData(normalizedSection, photos)) return '';
+  const rows = visibleRows(normalizedSection);
+  const sectionWithRows = { ...normalizedSection, rows };
+  const body = rows.length ? (sectionWithRows.kind === 'tx' ? txReportHtml(sectionWithRows) : sectionWithRows.kind === 'clim' ? climReportHtml(sectionWithRows) : energyReportHtml(sectionWithRows)) : `<div class="section-name">${escapeHtml(sectionWithRows.title)}</div>`;
+  return body + (photosHasData(photos) ? sectionPhotosReportHtml(photos, def.photoTitle || section.photoTitle || section.title) : '');
 }
 
 function txReportHtml(section) {
@@ -766,10 +832,11 @@ function sectionPhotosReportHtml(photos, title) {
   const p = photos || {};
   const beforeSrc = p.beforeUrl || p.before?.dataUrl || '';
   const afterSrc = p.afterUrl || p.after?.dataUrl || '';
+  if (!beforeSrc && !afterSrc) return '';
   return `<div class="photos-subtitle">${escapeHtml(title || 'Photos')}</div>
     <div class="photos-report section-photos-report">
-      <figure><figcaption>Photo avant</figcaption>${beforeSrc ? `<img src="${escapeHtml(beforeSrc)}" alt="Photo avant">` : '<p>Aucune photo avant</p>'}</figure>
-      <figure><figcaption>Photo après</figcaption>${afterSrc ? `<img src="${escapeHtml(afterSrc)}" alt="Photo après">` : '<p>Aucune photo après</p>'}</figure>
+      ${beforeSrc ? `<figure><figcaption>Photo avant</figcaption><img src="${escapeHtml(beforeSrc)}" alt="Photo avant"></figure>` : ''}
+      ${afterSrc ? `<figure><figcaption>Photo après</figcaption><img src="${escapeHtml(afterSrc)}" alt="Photo après"></figure>` : ''}
     </div>`;
 }
 

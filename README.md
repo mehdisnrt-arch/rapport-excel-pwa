@@ -1,60 +1,31 @@
-# Rapport Excel PWA - Version complète
+# Rapport Excel PWA - Version finale centres
 
 Application PWA pour GitHub Pages + Google Sheets / Apps Script.
 
-## Ce que cette version ajoute
+## Ce qui est inclus
 
-- Même structure Excel: TNT, FM, Climatisation, Energie.
-- Chaque rapport crée une feuille Google Sheet formatée avec couleurs, bordures et tableaux.
-- Photos avant/après séparées sous chaque partie:
-  - TNT
-  - FM
-  - Climatisation
-  - Energie
-- Energie contient des champs remplissables:
-  - Unité
-  - Marque
-  - Puissance
-  - U. out
-  - Fréquence (HZ)
-  - U. Batterie
-  - Compteur (h)
-  - Temp. Huile
-  - Pression Huile
-  - Date
-  - Remarques
+- Rapport avec structure Excel: TNT, FM, Climatisation, Energie.
+- Centre sélectionnable: FIGUIG, BOUARFA, TENDRARA, AINCHAIR, BOUANANE, AIN CHWATER, BENITADJIT, TALSINET.
+- Photos avant/après par partie: TNT, FM, Climatisation, Energie.
+- Champs Energie vides par défaut: Unité, Marque, Puissance, U. out, Fréquence, U. Batterie, Compteur, Temp. Huile, Pression Huile.
+- Si une partie n’est pas remplie, elle ne sort pas dans le rapport.
+- Suppression locale et suppression définitive Google Sheets depuis l’historique.
+- Chaque rapport crée une feuille Google Sheet formatée avec couleurs et bordures.
 
-## Installation Google Sheets
+## Mise à jour Apps Script
 
-1. Ouvrir ton Google Sheet.
+1. Ouvre ton Google Sheet.
 2. Extensions > Apps Script.
-3. Supprimer l'ancien code.
-4. Coller le contenu de `apps-script/Code.gs`.
-5. Enregistrer.
+3. Supprime l'ancien code.
+4. Colle `apps-script/Code.gs`.
+5. Save.
 6. Deploy > Manage deployments > Edit.
 7. Version: New version.
-8. Execute as: Me.
-9. Who has access: Anyone.
-10. Deploy.
-11. Tester avec: `TON_LIEN_EXEC?action=setup`.
+8. Deploy.
 
-## Installation GitHub Pages
+## Mise à jour GitHub Pages
 
-1. Dézipper le projet.
-2. Uploader les fichiers dans la racine du repository GitHub:
-   - `index.html`
-   - `app.js`
-   - `style.css`
-   - `manifest.json`
-   - `service-worker.js`
-   - `icons/`
-3. Settings > Pages.
-4. Source: Deploy from branch.
-5. Branch: main / root.
-6. Ouvrir le lien GitHub Pages dans iPhone.
-7. Share > Add to Home Screen.
-
-## Important
-
-Après remplacement des fichiers sur GitHub, ouvrir le lien avec `?v=3` à la fin pour casser le cache.
-Exemple: `https://username.github.io/repo/?v=3`.
+1. Upload tous les fichiers à la racine du repo GitHub.
+2. Garde GitHub Pages sur branch `main`, folder `/root`.
+3. Ouvre le lien avec `?v=5` pour casser le cache.
+4. Sur iPhone, supprime l'ancienne icône PWA puis ajoute-la de nouveau.

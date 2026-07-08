@@ -231,3 +231,5 @@ button.danger { background: #fee2e2; color: #991b1b; box-shadow: none; }
   .report-sheet .section-photos-report figure { min-height: 130px; }
   .report-sheet .section-photos-report img { max-height: 240px; }
 }
+
+.outline-danger { background: transparent !important; color: #b91c1c !important; border: 1px solid #b91c1c !important; }

@@ -1,46 +1,10 @@
-You are editing a GitHub Pages PWA maintenance report app connected to Google Sheets via Apps Script.
+Keep the app as a static PWA for GitHub Pages connected to Google Apps Script.
+Preserve the Excel-like Google Sheet output and do not add any backend except Apps Script.
 
-Keep the current structure:
-- index.html
-- app.js
-- style.css
-- manifest.json
-- service-worker.js
-- apps-script/Code.gs
-
-Do not remove existing features:
-- PWA installable on iPhone
-- Google Sheets sync
-- report preview
-- print/PDF
-- export Excel .xls
-- local backup JSON
-
-Current required structure:
-1/ Emetteurs TNT
-2/ Emetteurs FM
-3/ Climatisation
-4/ Energie
-
-Keep Excel-like colors and formatting in both the printable report and Google Sheet output.
-
-Photos must be section-specific:
-- TNT: avant/après
-- FM: avant/après
-- Climatisation: avant/après
-- Energie: avant/après
-
-Energie fields must remain editable:
-- Unite
-- Marque
-- Puissance
-- U. out
-- Frequence (HZ)
-- U. Batterie
-- Compteur (h)
-- Temp. Huile
-- Pression Huile
-- Date
-- Remarques
-
-When saving to Google Sheets, Apps Script must create one formatted sheet per report with all sections and their photos immediately below each section.
+Important behavior:
+- Centre is selected from FIGUIG, BOUARFA, TENDRARA, AINCHAIR, BOUANANE, AIN CHWATER, BENITADJIT, TALSINET.
+- Energy fields must remain empty by default.
+- A report can be saved even with blank fields.
+- Empty sections must not appear in printable report or formatted Google Sheet report.
+- Photos are section-specific: TNT, FM, Climatisation, Energie.
+- History must allow local delete and definitive delete from Google Sheets.
