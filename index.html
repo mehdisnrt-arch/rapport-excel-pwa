@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Rapports Maintenance" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Rapports Maintenance</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Planning de Maintenance</p>
+      <h1>Rapport Excel</h1>
+      <p class="muted light">TNT · FM · Climatisation · Energie</p>
+    </div>
+    <button id="installBtn" class="ghost hidden" type="button">Installer</button>
+  </header>
+
+  <main class="shell">
+    <section class="card setup-card" id="setupCard">
+      <h2>Configuration Google Sheets</h2>
+      <p>Le lien Apps Script est déjà configuré. Tu peux le changer si tu redéploies le script.</p>
+      <div class="grid two">
+        <label>Apps Script URL
+          <input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/AKfy.../exec" autocomplete="off" />
+        </label>
+        <label>Opérateur par défaut
+          <input id="defaultOperator" type="text" value="EL MEHDI BENCHELH" />
+        </label>
+      </div>
+      <div class="actions">
+        <button id="saveSettingsBtn" type="button">Enregistrer réglages</button>
+        <button id="testConnectionBtn" type="button" class="secondary">Tester / Sync</button>
+      </div>
+      <p id="settingsStatus" class="status"></p>
+    </section>
+
+    <section class="stats-grid" aria-label="Résumé">
+      <div class="stat"><span>Rapports</span><strong id="statTotal">0</strong></div>
+      <div class="stat"><span>Ce mois</span><strong id="statMonth">0</strong></div>
+      <div class="stat"><span>Local</span><strong id="statLocal">0</strong></div>
+      <div class="stat"><span>Dernier</span><strong id="statLast">—</strong></div>
+    </section>
+
+    <nav class="tabs" aria-label="Navigation">
+      <button class="tab active" data-tab="formTab" type="button">Saisie Excel</button>
+      <button class="tab" data-tab="historyTab" type="button">Historique</button>
+      <button class="tab" data-tab="reportTab" type="button">Rapport</button>
+    </nav>
+
+    <section id="formTab" class="panel active">
+      <form id="reportForm" class="card form-card">
+        <div class="form-head">
+          <div>
+            <p class="eyebrow dark">Nouveau rapport</p>
+            <h2 id="formTitle">Rapport maintenance</h2>
+            <p class="muted">Même structure que le fichier Excel, avec photos avant/après à la fin.</p>
+          </div>
+          <strong id="reportNoBadge" class="badge">RPT-...</strong>
+        </div>
+
+        <div class="grid four">
+          <label>N° Rapport
+            <input id="reportNo" name="reportNo" type="text" readonly />
+          </label>
+          <label>Code planning
+            <input id="planning" name="planning" type="text" value="00161PLDEM2025" />
+          </label>
+          <label>Site
+            <input id="site" name="site" type="text" placeholder="Ex: PL DEM" />
+          </label>
+          <label>Date générale
+            <input id="mainDate" name="mainDate" type="date" />
+          </label>
+        </div>
+
+        <div class="grid two compact">
+          <label>Période
+            <input id="period" name="period" type="text" placeholder="Ex: Avril 2026" />
+          </label>
+          <label>Opérateurs
+            <input id="operators" name="operators" type="text" />
+          </label>
+        </div>
+
+        <div id="sectionsContainer" class="sections-container"></div>
+
+        <section class="excel-section photos-section">
+          <h3>Photos avant / après</h3>
+          <p class="muted">Les photos seront placées à la fin du rapport, pas dans les tableaux.</p>
+          <div class="grid two">
+            <label>Photo avant
+              <input id="photoBefore" type="file" accept="image/*" capture="environment" />
+            </label>
+            <label>Photo après
+              <input id="photoAfter" type="file" accept="image/*" capture="environment" />
+            </label>
+          </div>
+          <div class="photo-preview-row">
+            <figure>
+              <img id="previewBefore" alt="Aperçu photo avant" />
+              <figcaption>Avant</figcaption>
+            </figure>
+            <figure>
+              <img id="previewAfter" alt="Aperçu photo après" />
+              <figcaption>Après</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <div class="actions sticky-actions">
+          <button type="submit">Enregistrer dans Google Sheets</button>
+          <button type="button" id="previewBtn" class="secondary">Prévisualiser rapport</button>
+          <button type="button" id="resetBtn" class="ghost-dark">Nouveau vide</button>
+        </div>
+        <p id="formStatus" class="status"></p>
+      </form>
+    </section>
+
+    <section id="historyTab" class="panel">
+      <div class="card">
+        <div class="list-head">
+          <div>
+            <h2>Historique des rapports</h2>
+            <p class="muted">Les rapports créés depuis n’importe quel téléphone apparaissent ici après Sync.</p>
+          </div>
+          <div class="actions small-actions">
+            <button id="syncBtn" type="button" class="secondary">Sync Google Sheets</button>
+            <button id="exportJsonBtn" type="button" class="ghost-dark">Backup JSON</button>
+          </div>
+        </div>
+        <div class="grid three compact">
+          <label>Recherche
+            <input id="searchBox" type="search" placeholder="N°, site, opérateur..." />
+          </label>
+          <label>Filtrer par mois
+            <input id="monthFilter" type="month" />
+          </label>
+          <label>Importer backup JSON
+            <input id="importJson" type="file" accept="application/json" />
+          </label>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+
+    <section id="reportTab" class="panel">
+      <div class="card report-actions-card">
+        <div>
+          <h2>Rapport prêt à imprimer</h2>
+          <p class="muted">Choisis un rapport depuis l’historique ou prévisualise celui que tu viens de saisir.</p>
+        </div>
+        <div class="actions small-actions">
+          <button id="printBtn" type="button">Imprimer / PDF</button>
+          <button id="exportXlsBtn" type="button" class="secondary">Export Excel .xls</button>
+          <button id="copyReportBtn" type="button" class="ghost-dark">Copier HTML</button>
+        </div>
+      </div>
+      <div id="reportOutput" class="report-output"></div>
+    </section>
+  </main>
+
+  <template id="sectionTemplate">
+    <section class="excel-section">
+      <div class="section-title-row">
+        <h3></h3>
+        <button type="button" class="secondary mini add-row-btn">+ Ligne</button>
+      </div>
+      <div class="table-wrap"></div>
+      <div class="onsite-box">
+        <h4>Interventions sur site:</h4>
+        <ol></ol>
+      </div>
+    </section>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
