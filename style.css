@@ -169,3 +169,65 @@ button.danger { background: #fee2e2; color: #991b1b; box-shadow: none; }
   .report-sheet { width: 100%; }
   .report-sheet .excel-report-table th, .report-sheet .excel-report-table td { font-size: 10px; padding: 4px; }
 }
+
+/* Version complète: photos par section + champs énergie */
+.section-photos {
+  padding: 14px 16px 18px;
+  background: #f8fafc;
+  border-top: 1px solid #cbd5e1;
+}
+.section-photos h4 {
+  margin: 0 0 10px;
+  color: #0f766e;
+}
+.section-photos .photo-label {
+  color: #334155;
+}
+.energy-table {
+  min-width: 1120px;
+}
+.energy-table th,
+.energy-table td {
+  min-width: 90px;
+}
+.energy-table th:first-child,
+.energy-table td:first-child {
+  min-width: 135px;
+}
+.energy-report-table th,
+.energy-report-table td {
+  font-size: 10px !important;
+  padding: 4px !important;
+}
+.report-sheet .section-name {
+  color: #003366;
+  background: #D9EAF7;
+  border: 1px solid #333;
+  padding: 5px 7px;
+}
+.report-sheet .excel-report-table th {
+  background: #FFFF99;
+  color: #003366;
+}
+.report-sheet .photos-subtitle {
+  color: #003366;
+  background: #F3F6FA;
+  border: 1px solid #333;
+  font-weight: bold;
+  padding: 5px 7px;
+  margin-top: 8px;
+}
+.report-sheet .section-photos-report {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+.report-sheet .section-photos-report figure {
+  min-height: 180px;
+}
+.report-sheet .section-photos-report img {
+  max-height: 300px;
+}
+@media print {
+  .report-sheet .section-photos-report figure { min-height: 130px; }
+  .report-sheet .section-photos-report img { max-height: 240px; }
+}

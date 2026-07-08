@@ -17,7 +17,7 @@
     <div>
       <p class="eyebrow">Planning de Maintenance</p>
       <h1>Rapport Excel</h1>
-      <p class="muted light">TNT · FM · Climatisation · Energie</p>
+      <p class="muted light">TNT · FM · Climatisation · Energie · Photos par section</p>
     </div>
     <button id="installBtn" class="ghost hidden" type="button">Installer</button>
   </header>
@@ -25,7 +25,7 @@
   <main class="shell">
     <section class="card setup-card" id="setupCard">
       <h2>Configuration Google Sheets</h2>
-      <p>Le lien Apps Script est déjà configuré. Tu peux le changer si tu redéploies le script.</p>
+      <p>Le lien Apps Script est configuré. Change-le seulement si tu redéploies le script.</p>
       <div class="grid two">
         <label>Apps Script URL
           <input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/AKfy.../exec" autocomplete="off" />
@@ -60,7 +60,7 @@
           <div>
             <p class="eyebrow dark">Nouveau rapport</p>
             <h2 id="formTitle">Rapport maintenance</h2>
-            <p class="muted">Même structure que le fichier Excel, avec photos avant/après à la fin.</p>
+            <p class="muted">Même structure que le fichier Excel. Chaque partie a ses propres photos avant/après.</p>
           </div>
           <strong id="reportNoBadge" class="badge">RPT-...</strong>
         </div>
@@ -90,29 +90,6 @@
         </div>
 
         <div id="sectionsContainer" class="sections-container"></div>
-
-        <section class="excel-section photos-section">
-          <h3>Photos avant / après</h3>
-          <p class="muted">Les photos seront placées à la fin du rapport, pas dans les tableaux.</p>
-          <div class="grid two">
-            <label>Photo avant
-              <input id="photoBefore" type="file" accept="image/*" capture="environment" />
-            </label>
-            <label>Photo après
-              <input id="photoAfter" type="file" accept="image/*" capture="environment" />
-            </label>
-          </div>
-          <div class="photo-preview-row">
-            <figure>
-              <img id="previewBefore" alt="Aperçu photo avant" />
-              <figcaption>Avant</figcaption>
-            </figure>
-            <figure>
-              <img id="previewAfter" alt="Aperçu photo après" />
-              <figcaption>Après</figcaption>
-            </figure>
-          </div>
-        </section>
 
         <div class="actions sticky-actions">
           <button type="submit">Enregistrer dans Google Sheets</button>
@@ -176,6 +153,27 @@
       <div class="onsite-box">
         <h4>Interventions sur site:</h4>
         <ol></ol>
+      </div>
+      <div class="section-photos">
+        <h4></h4>
+        <div class="grid two">
+          <label class="photo-label">Photo avant
+            <input class="photo-input" data-photo-kind="before" type="file" accept="image/*" capture="environment" />
+          </label>
+          <label class="photo-label">Photo après
+            <input class="photo-input" data-photo-kind="after" type="file" accept="image/*" capture="environment" />
+          </label>
+        </div>
+        <div class="photo-preview-row">
+          <figure>
+            <img class="preview-before" alt="Aperçu photo avant" />
+            <figcaption>Avant</figcaption>
+          </figure>
+          <figure>
+            <img class="preview-after" alt="Aperçu photo après" />
+            <figcaption>Après</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
   </template>

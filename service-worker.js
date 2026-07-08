@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rapport-excel-pwa-v1';
+const CACHE_NAME = 'rapport-excel-pwa-v3-section-photos';
 const ASSETS = ['./', './index.html', './style.css', './app.js', './manifest.json', './icons/icon-192.svg', './icons/icon-512.svg'];
 
 self.addEventListener('install', event => {

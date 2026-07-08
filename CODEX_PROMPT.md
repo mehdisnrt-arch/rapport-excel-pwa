@@ -1,33 +1,46 @@
-Tu es Codex. Travaille sur cette PWA de rapport maintenance.
+You are editing a GitHub Pages PWA maintenance report app connected to Google Sheets via Apps Script.
 
-Objectif métier:
-- L'utilisateur veut une application installable sur iPhone via GitHub Pages.
-- Les données sont sauvegardées dans Google Sheets via Apps Script.
-- Plusieurs téléphones peuvent saisir les rapports.
-- Le rapport doit garder exactement la structure Excel suivante:
-  1/ Emetteurs TNT: tableau Service + Avant Intervention FWD/REF/T°/Alarm/Type + Après Intervention FWD/REF/T°/Alarm/Type + Date + Remarques.
-  2/ Emetteurs FM: même tableau.
-  3/ Climatisation: Service + ON + T. Cons. + T. Salle + Alarm + Type + Date + Remarques.
-  4/ Energie: Service + Interventions sur site.
-- Les photos avant/après doivent être ajoutées seulement à la fin du rapport.
+Keep the current structure:
+- index.html
+- app.js
+- style.css
+- manifest.json
+- service-worker.js
+- apps-script/Code.gs
 
-Contraintes techniques:
-- Rester compatible GitHub Pages: pas de Node, pas de backend autre que Apps Script.
-- Garder les fichiers: index.html, style.css, app.js, manifest.json, service-worker.js, icons/.
-- Backend dans apps-script/Code.gs.
-- Ne pas ajouter de dépendances npm.
-- Garder compatibilité iPhone Safari.
-- Les photos doivent être compressées côté client.
-- Utiliser JSONP pour lecture Apps Script et POST no-cors simple pour écriture.
-- Garder le lien Apps Script actuel par défaut:
-  https://script.google.com/macros/s/AKfycbxI66qHAU91KW4YP0KjQqkiMFX8WbzQ3cRqXmASemOpcSV2HVi6OeeZoKA4qJFKSyI0sg/exec
+Do not remove existing features:
+- PWA installable on iPhone
+- Google Sheets sync
+- report preview
+- print/PDF
+- export Excel .xls
+- local backup JSON
 
-À tester:
-1. Création rapport depuis iPhone.
-2. Upload photo avant/après vers Drive.
-3. Sync historique Google Sheets.
-4. Rapport imprimable avec tables exactes.
-5. Export Excel .xls.
-6. Installation PWA sur iPhone.
+Current required structure:
+1/ Emetteurs TNT
+2/ Emetteurs FM
+3/ Climatisation
+4/ Energie
 
-Ne transforme pas la logique en fiche séparée par radio: il faut un seul rapport complet avec sections TNT, FM, Climatisation, Energie.
+Keep Excel-like colors and formatting in both the printable report and Google Sheet output.
+
+Photos must be section-specific:
+- TNT: avant/après
+- FM: avant/après
+- Climatisation: avant/après
+- Energie: avant/après
+
+Energie fields must remain editable:
+- Unite
+- Marque
+- Puissance
+- U. out
+- Frequence (HZ)
+- U. Batterie
+- Compteur (h)
+- Temp. Huile
+- Pression Huile
+- Date
+- Remarques
+
+When saving to Google Sheets, Apps Script must create one formatted sheet per report with all sections and their photos immediately below each section.
