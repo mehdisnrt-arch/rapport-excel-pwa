@@ -1,0 +1,54 @@
+.row-photo-cell {
+  min-width: 118px;
+  width: 118px;
+}
+
+.row-photo-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: #e0f2fe;
+  color: #075985;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.row-photo-input {
+  display: none;
+}
+
+.row-photo-preview {
+  display: none;
+  width: 92px;
+  height: 68px;
+  object-fit: cover;
+  margin: 7px auto 0;
+  border-radius: 8px;
+  border: 1px solid #94a3b8;
+  background: #fff;
+}
+
+.row-photo-preview[src] {
+  display: block;
+}
+
+.report-row-photo {
+  display: block;
+  width: 90px;
+  max-height: 78px;
+  object-fit: contain;
+  margin: auto;
+}
+
+.satellite-table {
+  min-width: 850px;
+}
+
+@media print {
+  .report-row-photo {
+    width: 72px;
+    max-height: 62px;
+  }
+}
