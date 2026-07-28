@@ -1,5 +1,5 @@
-const CACHE_NAME = 'rapport-excel-pwa-v5-final-centres';
-const ASSETS = ['./', './index.html', './style.css', './app.js', './manifest.json', './icons/icon-192.svg', './icons/icon-512.svg'];
+const CACHE_NAME = 'rapport-excel-pwa-v6-row-photos-satellite';
+const ASSETS = ['./', './index.html', './style.css', './enhancements.css', './app.js', './enhancements.js', './manifest.json', './icons/icon-192.svg', './icons/icon-512.svg'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
