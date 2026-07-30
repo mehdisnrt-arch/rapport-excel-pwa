@@ -34,6 +34,7 @@
     document.write('<script src="energy-empty-v11.js"><\/script>');
     document.write('<script src="date-sync-v12.js"><\/script>');
     document.write('<script src="energy-manual-remove-v13.js"><\/script>');
+    document.write('<script src="backend-version-v14.js"><\/script>');
     return;
   }
 
@@ -48,7 +49,9 @@
     loadScript('empty-fields-fix.js', () => {
       loadScript('final-layout-v10.js', () => {
         loadScript('energy-empty-v11.js', () => {
-          loadScript('date-sync-v12.js', () => loadScript('energy-manual-remove-v13.js'));
+          loadScript('date-sync-v12.js', () => {
+            loadScript('energy-manual-remove-v13.js', () => loadScript('backend-version-v14.js'));
+          });
         });
       });
     });
