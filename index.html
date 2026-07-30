@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0f172a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Rapports Maintenance" />
+  <meta name="apple-mobile-web-app-title" content="Rapports de Mission" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Rapports Maintenance</title>
+  <title>Rapports de Mission</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/icon-192.svg" />
   <link rel="stylesheet" href="style.css" />
@@ -60,7 +60,7 @@
         <div class="form-head">
           <div>
             <p class="eyebrow dark">Nouveau rapport</p>
-            <h2 id="formTitle">Rapport maintenance</h2>
+            <h2 id="formTitle">Rapport de mission</h2>
             <p class="muted">Même structure que le fichier Excel. Chaque équipement peut avoir sa propre photo.</p>
           </div>
           <strong id="reportNoBadge" class="badge">RPT-...</strong>
@@ -119,19 +119,16 @@
             <p class="muted">Les rapports créés depuis n’importe quel téléphone apparaissent ici après Sync.</p>
           </div>
           <div class="actions small-actions">
-            <button id="syncBtn" type="button" class="secondary">Sync Google Sheets</button>
-            <button id="exportJsonBtn" type="button" class="ghost-dark">Backup JSON</button>
+            <button id="exportJsonBtn" type="button" class="secondary">Backup JSON</button>
+            <label class="button-like">Importer JSON<input id="importJsonInput" type="file" accept="application/json" hidden /></label>
           </div>
         </div>
-        <div class="grid three compact">
-          <label>Recherche
-            <input id="searchBox" type="search" placeholder="N°, centre, opérateur..." />
+        <div class="grid two compact">
+          <label>Rechercher
+            <input id="searchBox" type="search" placeholder="Centre, opérateur, période..." />
           </label>
-          <label>Filtrer par mois
+          <label>Mois
             <input id="monthFilter" type="month" />
-          </label>
-          <label>Importer backup JSON
-            <input id="importJson" type="file" accept="application/json" />
           </label>
         </div>
         <div id="historyList" class="history-list"></div>
@@ -141,53 +138,18 @@
     <section id="reportTab" class="panel">
       <div class="card report-actions-card">
         <div>
-          <h2>Rapport prêt à imprimer</h2>
-          <p class="muted">Choisis un rapport depuis l’historique ou prévisualise celui que tu viens de saisir.</p>
+          <p class="eyebrow dark">Aperçu</p>
+          <h2>Rapport de mission</h2>
         </div>
         <div class="actions small-actions">
           <button id="printBtn" type="button">Imprimer / PDF</button>
-          <button id="exportXlsBtn" type="button" class="secondary">Export Excel .xls</button>
-          <button id="copyReportBtn" type="button" class="ghost-dark">Copier HTML</button>
+          <button id="exportXlsBtn" type="button" class="secondary">Exporter Excel</button>
+          <button id="copyHtmlBtn" type="button" class="ghost-dark">Copier HTML</button>
         </div>
       </div>
       <div id="reportOutput" class="report-output"></div>
     </section>
   </main>
-
-  <template id="sectionTemplate">
-    <section class="excel-section">
-      <div class="section-title-row">
-        <h3></h3>
-        <button type="button" class="secondary mini add-row-btn">+ Ligne</button>
-      </div>
-      <div class="table-wrap"></div>
-      <div class="onsite-box">
-        <h4>Interventions sur site:</h4>
-        <ol></ol>
-      </div>
-      <div class="section-photos">
-        <h4></h4>
-        <div class="grid two">
-          <label class="photo-label">Photo avant
-            <input class="photo-input" data-photo-kind="before" type="file" accept="image/*" />
-          </label>
-          <label class="photo-label">Photo après
-            <input class="photo-input" data-photo-kind="after" type="file" accept="image/*" />
-          </label>
-        </div>
-        <div class="photo-preview-row">
-          <figure>
-            <img class="preview-before" alt="Aperçu photo avant" />
-            <figcaption>Avant</figcaption>
-          </figure>
-          <figure>
-            <img class="preview-after" alt="Aperçu photo après" />
-            <figcaption>Après</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-  </template>
 
   <script src="app.js"></script>
   <script src="enhancements.js"></script>
