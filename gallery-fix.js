@@ -30,15 +30,18 @@
   if (document.readyState === 'loading') {
     document.write('<script src="final-fixes.js"><\/script>');
     document.write('<script src="empty-fields-fix.js"><\/script>');
+    document.write('<script src="final-layout-v10.js"><\/script>');
     return;
   }
 
-  const finalScript = document.createElement('script');
-  finalScript.src = 'final-fixes.js';
-  finalScript.onload = () => {
-    const emptyScript = document.createElement('script');
-    emptyScript.src = 'empty-fields-fix.js';
-    document.head.appendChild(emptyScript);
+  const loadScript = (src, done) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = done || null;
+    document.head.appendChild(script);
   };
-  document.head.appendChild(finalScript);
+
+  loadScript('final-fixes.js', () => {
+    loadScript('empty-fields-fix.js', () => loadScript('final-layout-v10.js'));
+  });
 })();
