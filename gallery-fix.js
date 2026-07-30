@@ -25,14 +25,20 @@
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
 
-/* Charge les ajustements finaux avant DOMContentLoaded afin que les gestionnaires
-   de formulaire utilisent directement la version corrigée. */
-(function loadFinalFixes() {
+/* Charge les corrections dans l'ordre avant DOMContentLoaded. */
+(function loadReportFixes() {
   if (document.readyState === 'loading') {
     document.write('<script src="final-fixes.js"><\/script>');
+    document.write('<script src="empty-fields-fix.js"><\/script>');
     return;
   }
-  const script = document.createElement('script');
-  script.src = 'final-fixes.js';
-  document.head.appendChild(script);
+
+  const finalScript = document.createElement('script');
+  finalScript.src = 'final-fixes.js';
+  finalScript.onload = () => {
+    const emptyScript = document.createElement('script');
+    emptyScript.src = 'empty-fields-fix.js';
+    document.head.appendChild(emptyScript);
+  };
+  document.head.appendChild(finalScript);
 })();
