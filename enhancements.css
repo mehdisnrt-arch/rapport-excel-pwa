@@ -46,6 +46,22 @@
   min-width: 850px;
 }
 
+.satellite-cn-only {
+  min-width: 0 !important;
+  width: min(420px, 100%);
+}
+
+.satellite-cn-only th,
+.satellite-cn-only td {
+  min-width: 150px;
+}
+
+.satellite-cn-only input {
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
 @media print {
   .report-row-photo {
     width: 72px;
