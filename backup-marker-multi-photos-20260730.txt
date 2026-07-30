@@ -1,0 +1,2 @@
+Backup reference before final multi-photo layout: commit 5531aac1c3b593c72bc7e5f0d7bbd1cf7ab5eeec
+Existing backup branches remain available. This marker does not modify application data.
