@@ -1,5 +1,5 @@
-const CACHE_NAME = 'rapport-excel-pwa-v8-report-layout-centre-sheet';
-const ASSETS = ['./', './index.html', './style.css', './enhancements.css', './app.js', './enhancements.js', './gallery-fix.js', './final-fixes.js', './manifest.json', './icons/icon-192.svg', './icons/icon-512.svg'];
+const CACHE_NAME = 'rapport-excel-pwa-v9-hide-empty-sections';
+const ASSETS = ['./', './index.html', './style.css', './enhancements.css', './app.js', './enhancements.js', './gallery-fix.js', './final-fixes.js', './empty-fields-fix.js', './manifest.json', './icons/icon-192.svg', './icons/icon-512.svg'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
