@@ -24,3 +24,15 @@
 
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+/* Charge les ajustements finaux avant DOMContentLoaded afin que les gestionnaires
+   de formulaire utilisent directement la version corrigée. */
+(function loadFinalFixes() {
+  if (document.readyState === 'loading') {
+    document.write('<script src="final-fixes.js"><\\/script>');
+    return;
+  }
+  const script = document.createElement('script');
+  script.src = 'final-fixes.js';
+  document.head.appendChild(script);
+})();
