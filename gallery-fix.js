@@ -31,6 +31,7 @@
     document.write('<script src="final-fixes.js"><\/script>');
     document.write('<script src="empty-fields-fix.js"><\/script>');
     document.write('<script src="final-layout-v10.js"><\/script>');
+    document.write('<script src="energy-empty-v11.js"><\/script>');
     return;
   }
 
@@ -42,6 +43,8 @@
   };
 
   loadScript('final-fixes.js', () => {
-    loadScript('empty-fields-fix.js', () => loadScript('final-layout-v10.js'));
+    loadScript('empty-fields-fix.js', () => {
+      loadScript('final-layout-v10.js', () => loadScript('energy-empty-v11.js'));
+    });
   });
 })();
