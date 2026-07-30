@@ -29,7 +29,7 @@
    de formulaire utilisent directement la version corrigée. */
 (function loadFinalFixes() {
   if (document.readyState === 'loading') {
-    document.write('<script src="final-fixes.js"><\\/script>');
+    document.write('<script src="final-fixes.js"><\/script>');
     return;
   }
   const script = document.createElement('script');
