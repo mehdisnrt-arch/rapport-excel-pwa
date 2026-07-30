@@ -1,6 +1,6 @@
 .row-photo-cell {
-  min-width: 118px;
-  width: 118px;
+  min-width: 210px;
+  width: 210px;
 }
 
 .row-photo-button {
@@ -19,40 +19,75 @@
   display: none;
 }
 
+.row-photo-previews {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.row-photo-thumb-wrap {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
 .row-photo-preview {
-  display: none;
-  width: 92px;
-  height: 68px;
+  display: block;
+  width: 100%;
+  height: 64px;
   object-fit: cover;
-  margin: 7px auto 0;
   border-radius: 8px;
   border: 1px solid #94a3b8;
   background: #fff;
 }
 
-.row-photo-preview[src] {
-  display: block;
+.remove-row-photo-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  box-shadow: none;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.report-row-photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(58px, 1fr));
+  gap: 5px;
+  min-width: 130px;
 }
 
 .report-row-photo {
   display: block;
-  width: 90px;
-  max-height: 78px;
+  width: 100%;
+  height: 72px;
   object-fit: contain;
   margin: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
 }
 
 .satellite-table {
-  min-width: 850px;
+  min-width: 520px;
 }
 
 .satellite-cn-only {
   min-width: 0 !important;
-  width: min(420px, 100%);
+  width: min(620px, 100%);
 }
 
-.satellite-cn-only th,
-.satellite-cn-only td {
+.satellite-cn-only th:first-child,
+.satellite-cn-only td:first-child {
   min-width: 150px;
 }
 
@@ -62,9 +97,28 @@
   font-weight: 800;
 }
 
+.clim-table-simple {
+  min-width: 850px;
+}
+
+.energy-table-simple {
+  min-width: 1220px;
+}
+
+@media (max-width: 820px) {
+  .row-photo-cell {
+    min-width: 190px;
+    width: 190px;
+  }
+}
+
 @media print {
+  .report-row-photo-gallery {
+    grid-template-columns: repeat(2, minmax(45px, 1fr));
+    min-width: 105px;
+  }
+
   .report-row-photo {
-    width: 72px;
-    max-height: 62px;
+    height: 58px;
   }
 }
