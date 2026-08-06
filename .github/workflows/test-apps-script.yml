@@ -1,0 +1,26 @@
+name: Test Apps Script endpoint
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test ping and JSONP
+        shell: bash
+        run: |
+          set -o pipefail
+          URL='https://script.google.com/macros/s/AKfycbxI66qHAU91KW4YP0KjQqkiMFX8WbzQ3cRqXmASemOpcSV2HVi6OeeZoKA4qJFKSyI0sg/exec'
+          echo '=== PING HEADERS ==='
+          curl -sS -L -D - "$URL?action=ping" -o /tmp/ping-body.txt || true
+          echo '=== PING BODY ==='
+          head -c 2000 /tmp/ping-body.txt || true
+          echo
+          echo '=== JSONP HEADERS ==='
+          curl -sS -L -D - "$URL?action=ping&callback=testCallback" -o /tmp/jsonp-body.txt || true
+          echo '=== JSONP BODY ==='
+          head -c 2000 /tmp/jsonp-body.txt || true
+          echo
