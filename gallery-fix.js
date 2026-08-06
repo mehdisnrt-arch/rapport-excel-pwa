@@ -36,7 +36,6 @@
     document.write('<script src="energy-manual-remove-v13.js"><\/script>');
     document.write('<script src="backend-version-v14.js"><\/script>');
     document.write('<script src="report-title-v15.js"><\/script>');
-    document.write('<script src="wire-events-fix-v17.js"><\/script>');
     return;
   }
 
@@ -53,9 +52,7 @@
         loadScript('energy-empty-v11.js', () => {
           loadScript('date-sync-v12.js', () => {
             loadScript('energy-manual-remove-v13.js', () => {
-              loadScript('backend-version-v14.js', () => {
-                loadScript('report-title-v15.js', () => loadScript('wire-events-fix-v17.js'));
-              });
+              loadScript('backend-version-v14.js', () => loadScript('report-title-v15.js'));
             });
           });
         });

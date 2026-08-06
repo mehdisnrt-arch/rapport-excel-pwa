@@ -1,9 +1,6 @@
 'use strict';
 
-/* Ne bloque plus l'application selon le numéro de version du backend.
-   Les déploiements v14 et v15 restent compatibles, et tout backend qui répond
-   correctement à setup peut enregistrer et synchroniser les rapports. */
-
+/* Compatible avec les déploiements Apps Script v14 et v15. */
 const SUPPORTED_BACKEND_VERSIONS = new Set([
   'v14-google-sheet-layout',
   'v15-hide-empty-photo-columns'
@@ -35,21 +32,14 @@ onSubmit = async function onSubmitWithBackendCompat(event) {
   try {
     const setup = await jsonp('setup');
     if (!backendIsUsable(setup)) {
-      saveLocalOnlyBackendCompat(
-        status,
-        'Sauvegardé localement seulement. Google Apps Script ne répond pas correctement.'
-      );
+      saveLocalOnlyBackendCompat(status, 'Sauvegardé localement seulement. Google Apps Script ne répond pas correctement.');
       return;
     }
-
     if (setup.version && !SUPPORTED_BACKEND_VERSIONS.has(setup.version)) {
       console.warn('Version Apps Script non reconnue:', setup.version);
     }
   } catch (error) {
-    saveLocalOnlyBackendCompat(
-      status,
-      'Sauvegardé localement seulement. Vérification Google Sheets impossible: ' + error.message
-    );
+    saveLocalOnlyBackendCompat(status, 'Sauvegardé localement seulement. Vérification Google Sheets impossible: ' + error.message);
     return;
   }
 
