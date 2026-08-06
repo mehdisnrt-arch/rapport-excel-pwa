@@ -1,16 +1,12 @@
 'use strict';
 
-/* Compatible avec les déploiements Apps Script v14 et v15. */
-const SUPPORTED_BACKEND_VERSIONS = new Set([
-  'v14-google-sheet-layout',
-  'v15-hide-empty-photo-columns'
-]);
+const REQUIRED_BACKEND_VERSION_V15 = 'v15-hide-empty-photo-columns';
 
-function backendIsUsable(setup) {
-  return Boolean(setup && setup.ok === true);
+function backendIsCurrentV15(setup) {
+  return setup && setup.ok === true && setup.version === REQUIRED_BACKEND_VERSION_V15;
 }
 
-function saveLocalOnlyBackendCompat(status, message) {
+function saveLocalOnlyV15(status, message) {
   const report = collectReportFromForm();
   if (!report.reportNo) report.reportNo = makeReportNo();
   upsertLocal(report);
@@ -19,49 +15,56 @@ function saveLocalOnlyBackendCompat(status, message) {
   toast(status, message, 'err');
 }
 
-const onSubmitBeforeBackendCompat = onSubmit;
-onSubmit = async function onSubmitWithBackendCompat(event) {
+const onSubmitBeforeBackendV15 = onSubmit;
+onSubmit = async function onSubmitWithBackendVersionV15(event) {
   event.preventDefault();
   const status = $('#formStatus');
 
   if (!settings.apiUrl) {
-    saveLocalOnlyBackendCompat(status, 'Sauvegardé localement. Apps Script URL manquant.');
+    saveLocalOnlyV15(status, 'Sauvegardé localement. Apps Script URL manquant.');
     return;
   }
 
   try {
     const setup = await jsonp('setup');
-    if (!backendIsUsable(setup)) {
-      saveLocalOnlyBackendCompat(status, 'Sauvegardé localement seulement. Google Apps Script ne répond pas correctement.');
+    if (!backendIsCurrentV15(setup)) {
+      saveLocalOnlyV15(
+        status,
+        'Sauvegardé localement seulement. Google Apps Script est ancien: remplace son code par Code-v15.gs puis déploie une nouvelle version.'
+      );
       return;
     }
-    if (setup.version && !SUPPORTED_BACKEND_VERSIONS.has(setup.version)) {
-      console.warn('Version Apps Script non reconnue:', setup.version);
-    }
   } catch (error) {
-    saveLocalOnlyBackendCompat(status, 'Sauvegardé localement seulement. Vérification Google Sheets impossible: ' + error.message);
+    saveLocalOnlyV15(status, 'Sauvegardé localement seulement. Vérification Google Sheets impossible: ' + error.message);
     return;
   }
 
-  return onSubmitBeforeBackendCompat(event);
+  return onSubmitBeforeBackendV15(event);
 };
 
-syncReports = async function syncReportsWithBackendCompat() {
+syncReports = async function syncReportsWithBackendVersionV15() {
   const status = $('#settingsStatus');
   settings.apiUrl = $('#apiUrl').value.trim();
   saveJson(LS_SETTINGS, settings);
 
   if (!settings.apiUrl) return toast(status, 'Ajoute Apps Script URL.', 'err');
-  toast(status, 'Synchronisation...', 'warn');
+  toast(status, 'Vérification Google Apps Script...', 'warn');
 
   try {
     const setup = await jsonp('setup');
-    if (!backendIsUsable(setup)) {
-      throw new Error(setup?.error || 'Google Apps Script ne répond pas correctement.');
+    if (!backendIsCurrentV15(setup)) {
+      return toast(
+        status,
+        'Google Apps Script ancien. Remplace son code par Code-v15.gs et déploie une nouvelle version avant Sync.',
+        'err'
+      );
     }
 
     const response = await jsonp('listReports', { limit: 500 });
     if (!response.ok) throw new Error(response.error || 'Lecture refusée');
+    if (response.version !== REQUIRED_BACKEND_VERSION_V15) {
+      throw new Error('Version Google Apps Script incorrecte.');
+    }
 
     mergeReports(response.reports || []);
     renderHistory();
