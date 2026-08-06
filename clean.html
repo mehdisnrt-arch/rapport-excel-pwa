@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <title>Rapports de Mission — Clean</title>
+  <style>
+    :root{--bg:#f1f5f9;--card:#fff;--ink:#0f172a;--muted:#64748b;--line:#cbd5e1;--blue:#2563eb;--blue2:#1d4ed8;--green:#15803d;--red:#b91c1c;--amber:#b45309}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    button,input,select,textarea{font:inherit}.top{background:#0f172a;color:#fff;padding:18px 16px}.top h1{margin:0;font-size:23px}.top p{margin:5px 0 0;color:#cbd5e1}.shell{max-width:1240px;margin:auto;padding:14px}
+    .card{background:var(--card);border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 4px 18px rgba(15,23,42,.05)}
+    .grid{display:grid;gap:10px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    label{font-weight:650;font-size:14px}input,select,textarea{width:100%;margin-top:5px;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;color:var(--ink)}
+    textarea{min-height:70px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    button{border:0;border-radius:9px;padding:10px 14px;font-weight:750;cursor:pointer;background:var(--blue);color:#fff}button:hover{filter:brightness(.96)}
+    button.secondary{background:#334155}button.light{background:#e2e8f0;color:#0f172a}button.danger{background:var(--red)}button.success{background:var(--green)}
+    .tabs{display:flex;gap:7px;overflow:auto;margin-bottom:14px}.tab{background:#e2e8f0;color:#0f172a;white-space:nowrap}.tab.active{background:#0f172a;color:#fff}
+    .panel{display:none}.panel.active{display:block}.status{min-height:22px;padding:8px 10px;border-radius:8px;margin-top:10px;background:#f8fafc;color:#334155}
+    .status.ok{background:#dcfce7;color:#166534}.status.err{background:#fee2e2;color:#991b1b}.status.warn{background:#fef3c7;color:#92400e}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;text-align:center}.stat b{display:block;font-size:22px}
+    .section{border:1px solid #cbd5e1;border-radius:12px;margin:14px 0;overflow:hidden}.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#1d4ed8;color:#fff;padding:10px 12px}
+    .section-head h3{margin:0;font-size:17px}.section-body{padding:10px}.table-wrap{overflow:auto}.rows{width:100%;border-collapse:collapse;min-width:850px}.rows th,.rows td{border:1px solid #cbd5e1;padding:5px;vertical-align:top}.rows th{background:#dbeafe;font-size:12px}.rows input,.rows textarea{margin:0;padding:7px;border-radius:5px;font-size:13px;min-width:92px}.rows textarea{min-width:160px;min-height:54px}
+    .photo-box{min-width:145px}.thumbs{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.thumbs img{width:44px;height:44px;object-fit:cover;border-radius:5px;border:1px solid #cbd5e1}
+    .history-item{border:1px solid #e2e8f0;border-radius:11px;padding:11px;margin:9px 0}.history-title{display:flex;justify-content:space-between;gap:10px;align-items:center}.history-title h3{margin:0}.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin-top:6px}.badge{background:#e2e8f0;border-radius:99px;padding:3px 8px}
+    .preview{background:#fff}.preview h2{text-align:center}.preview table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}.preview th,.preview td{border:1px solid #94a3b8;padding:5px}.preview th{background:#dbeafe}.preview .pv-title{background:#1d4ed8;color:#fff;font-weight:700;padding:8px;margin-top:15px}
+    .empty{color:var(--muted);text-align:center;padding:22px}.version{font-size:12px;color:#94a3b8;margin-top:6px}
+    @media(max-width:760px){.g2,.g4{grid-template-columns:1fr}.shell{padding:9px}.card{border-radius:10px;padding:10px}.stats{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.top h1{font-size:20px}}
+    @media print{.top,.tabs,.config,.actions,.status,.stats{display:none!important}.shell{max-width:none;padding:0}.card{box-shadow:none;border:0}.panel{display:none!important}#previewPanel{display:block!important}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <h1>Rapports de Mission</h1>
+  <p>TNT · FM · Climatisation · Énergie · Satellite</p>
+  <div class="version">Clean rebuild v1 — Google Sheets archive</div>
+</header>
+<main class="shell">
+  <section class="card config">
+    <div class="grid g2">
+      <label>Apps Script URL
+        <input id="apiUrl" type="url" autocomplete="off">
+      </label>
+      <label>Opérateur par défaut
+        <input id="defaultOperator" type="text">
+      </label>
+    </div>
+    <div class="actions">
+      <button id="saveSettings" type="button">Enregistrer réglages</button>
+      <button id="syncTop" class="success" type="button">Sync Google Sheets</button>
+    </div>
+    <div id="globalStatus" class="status">Initialisation…</div>
+    <div class="stats">
+      <div class="stat"><b id="statTotal">0</b>Rapports</div>
+      <div class="stat"><b id="statCloud">0</b>Cloud</div>
+      <div class="stat"><b id="statMonth">0</b>Ce mois</div>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-panel="formPanel" type="button">Nouveau / Modifier</button>
+    <button class="tab" data-panel="historyPanel" type="button">Historique</button>
+    <button class="tab" data-panel="previewPanel" type="button">Aperçu</button>
+  </nav>
+
+  <section id="formPanel" class="panel active">
+    <form id="reportForm">
+      <div class="card">
+        <div class="grid g4">
+          <label>N° Rapport<input id="reportNo" type="text" readonly></label>
+          <label>Centre
+            <input id="site" type="text" list="centres" required>
+            <datalist id="centres">
+              <option value="FIGUIG"><option value="BOUARFA"><option value="TENDRARA"><option value="AINCHAIR">
+              <option value="BOUANANE"><option value="AIN CHWATER"><option value="BENITADJIT"><option value="TALSINET">
+            </datalist>
+          </label>
+          <label>Date<input id="mainDate" type="date" required></label>
+          <label>Période<input id="period" type="text"></label>
+        </div>
+        <div class="grid g2" style="margin-top:10px">
+          <label>Opérateurs<input id="operators" type="text"></label>
+          <label>Planning / Objet<input id="planning" type="text"></label>
+        </div>
+        <div class="actions">
+          <button id="newBtn" class="light" type="button">Nouveau vide</button>
+          <button id="previewBtn" class="secondary" type="button">Aperçu</button>
+          <button type="submit">Enregistrer + Google Sheets</button>
+        </div>
+        <div id="formStatus" class="status"></div>
+      </div>
+      <div id="sections"></div>
+    </form>
+  </section>
+
+  <section id="historyPanel" class="panel">
+    <div class="card">
+      <div class="grid g2">
+        <label>Recherche<input id="search" type="search" placeholder="N° rapport, centre, opérateur…"></label>
+        <label>Mois<input id="monthFilter" type="month"></label>
+      </div>
+      <div class="actions">
+        <button id="syncHistory" class="success" type="button">Actualiser depuis Google Sheets</button>
+      </div>
+      <div id="historyStatus" class="status"></div>
+      <div id="history"></div>
+    </div>
+  </section>
+
+  <section id="previewPanel" class="panel">
+    <div class="card">
+      <div class="actions">
+        <button id="printBtn" type="button">Imprimer / PDF</button>
+        <button id="editPreviewBtn" class="secondary" type="button">Modifier</button>
+      </div>
+      <div id="preview" class="preview empty">Aucun rapport sélectionné.</div>
+    </div>
+  </section>
+</main>
+
+<script>
+'use strict';
+const LS_SETTINGS='rapport.excel.settings.v4.final.centres';
+const LS_REPORTS='rapport.excel.reports.v4.final.centres';
+const DEFAULT_API='https://script.google.com/macros/s/AKfycbxI66qHAU91KW4YP0KjQqkiMFX8WbzQ3cRqXmASemOpcSV2HVi6OeeZoKA4qJFKSyI0sg/exec';
+
+const TX_FIELDS=[
+  ['service','Service'],['fwdBefore','FWD Avant'],['refBefore','REF Avant'],['tempBefore','T° Avant'],
+  ['alarmBefore','Alarm Avant'],['typeBefore','Type Avant'],['fwdAfter','FWD Après'],['refAfter','REF Après'],
+  ['tempAfter','T° Après'],['alarmAfter','Alarm Après'],['typeAfter','Type Après'],['date','Date'],['remarks','Remarques']
+];
+const DEFINITIONS={
+  tnt:{title:'1/ Émetteurs TNT',kind:'tx',fields:TX_FIELDS,defaults:[{service:'Service1'},{service:'Service2'}],
+    interventions:['Soufflage et dépoussiérage de l’ensemble des parties internes de l’équipement','Contrôle visuel/auditif','Vérification de tous les modules, Connecteurs et câbles','Vérification de l’état des alimentations','Dépoussiérage de la baie']},
+  fm:{title:'2/ Émetteurs FM',kind:'tx',fields:TX_FIELDS,defaults:[{service:'SNRT-MED6'},{service:'SNRT-Ojd'},{service:'SNRT-Int'},{service:'SNRT-Nat'},{service:'SNRT-Amz'}],
+    interventions:['Soufflage et dépoussiérage de l’ensemble des parties internes de l’équipement','Contrôle visuel/auditif','Vérification de tous les modules, Connecteurs et câbles','Vérification de l’état des alimentations','Dépoussiérage de la baie']},
+  clim:{title:'3/ Climatisation',kind:'clim',fields:[['service','Climatiseur'],['tempCons','T. Cons.'],['tempSalle','T. Salle'],['date','Date'],['remarks','Remarques']],defaults:[{service:'Climatiseur'}],interventions:['Contrôle visuel/auditif']},
+  energie:{title:'4/ Énergie',kind:'energie',fields:[['puissance','Puissance'],['uout','U. out'],['frequence','Fréquence (Hz)'],['ubatterie','U. Batterie'],['compteur','Compteur (h)'],['tempHuile','Temp. Huile'],['pressionHuile','Pression Huile'],['date','Date'],['remarks','Remarques']],defaults:[{}],
+    interventions:['Contrôle visuel/auditif','Démarrage d’essai 5mn','Dépoussiérage extérieur du GE','Dépoussiérage des armoires électriques','Vérification de tous les disjoncteurs, Connecteurs et câbles']},
+  satellite:{title:'5/ Satellite',kind:'satellite',fields:[['cn','C/N (dB)']],defaults:[{}],interventions:[]}
+};
+const ORDER=['tnt','fm','clim','energie','satellite'];
+
+let settings=readJson(LS_SETTINGS,{apiUrl:DEFAULT_API,defaultOperator:''});
+let reports=readJson(LS_REPORTS,[]);
+let current=null;
+let draft=emptyReport();
+
+function $(s){return document.querySelector(s)}
+function $$(s){return Array.from(document.querySelectorAll(s))}
+function clone(v){return JSON.parse(JSON.stringify(v))}
+function readJson(k,f){try{const r=localStorage.getItem(k);return r?JSON.parse(r):clone(f)}catch(_){return clone(f)}}
+function writeJson(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function today(){const d=new Date(),z=d.getTimezoneOffset()*60000;return new Date(d-z).toISOString().slice(0,10)}
+function monthText(v){if(!v)return'';const d=new Date(v+'T00:00:00');return d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})}
+function dateFr(v){const m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}/${m[2]}/${m[1]}`:String(v||'')}
+function uid(){return crypto.randomUUID?crypto.randomUUID():'uid-'+Date.now()+'-'+Math.random().toString(16).slice(2)}
+function setStatus(node,msg,type=''){node.textContent=msg;node.className='status '+type}
+function reportKey(r){return r.uid||r.reportNo||`${r.site}|${r.mainDate}|${r.createdAt}`}
+function rowTemplate(obj={}){return {...obj,photoDataUrls:Array.isArray(obj.photoDataUrls)?obj.photoDataUrls:obj.photoDataUrl?[obj.photoDataUrl]:[]}}
+
+function emptyReport(){
+  const d=today(),sections={};
+  ORDER.forEach(k=>{const def=DEFINITIONS[k];sections[k]={key:k,kind:def.kind,title:def.title,rows:def.defaults.map(rowTemplate),interventions:clone(def.interventions)}});
+  return {uid:uid(),reportNo:'',planning:'',site:'',mainDate:d,period:monthText(d),operators:settings.defaultOperator||'',sections,photos:{},createdAt:new Date().toISOString(),updatedAt:'',source:'local'};
+}
+function normalizeReport(input){
+  const r=clone(input||{});
+  r.uid=r.uid||uid();r.sections=r.sections||{};r.photos=r.photos||{};
+  ORDER.forEach(k=>{
+    const def=DEFINITIONS[k],s=r.sections[k]||{};
+    s.key=k;s.kind=s.kind||def.kind;s.title=s.title||def.title;s.interventions=Array.isArray(s.interventions)?s.interventions:clone(def.interventions);
+    s.rows=(Array.isArray(s.rows)&&s.rows.length?s.rows:def.defaults).map(rowTemplate);r.sections[k]=s;
+  });
+  return r;
+}
+
+function switchPanel(id){
+  $$('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+  $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.panel===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function fillMeta(r){
+  $('#reportNo').value=r.reportNo||'';$('#site').value=r.site||'';$('#mainDate').value=r.mainDate||today();
+  $('#period').value=r.period||monthText(r.mainDate||today());$('#operators').value=r.operators||'';
+  $('#planning').value=r.planning||'';
+}
+function renderForm(r){
+  draft=normalizeReport(r);current=draft;fillMeta(draft);
+  const box=$('#sections');box.innerHTML='';
+  ORDER.forEach(k=>box.appendChild(renderSection(k,draft.sections[k])));
+}
+function renderSection(key,section){
+  const def=DEFINITIONS[key],root=document.createElement('section');root.className='section';root.dataset.key=key;
+  root.innerHTML=`<div class="section-head"><h3>${esc(def.title)}</h3><div class="actions" style="margin:0"><button class="light add-row" type="button">+ Ligne</button></div></div><div class="section-body"><div class="table-wrap"></div></div>`;
+  const table=document.createElement('table');table.className='rows';
+  table.innerHTML=`<thead><tr>${def.fields.map(f=>`<th>${esc(f[1])}</th>`).join('')}<th>Photos</th><th></th></tr></thead><tbody></tbody>`;
+  const tbody=table.querySelector('tbody');section.rows.forEach((row,i)=>tbody.appendChild(renderRow(key,row,i)));
+  root.querySelector('.table-wrap').appendChild(table);
+  root.querySelector('.add-row').onclick=()=>{section.rows.push(rowTemplate({date:$('#mainDate').value||today()}));tbody.appendChild(renderRow(key,section.rows.at(-1),section.rows.length-1))};
+  return root;
+}
+function renderRow(key,row,index){
+  const def=DEFINITIONS[key],tr=document.createElement('tr');tr.dataset.index=index;
+  def.fields.forEach(([field])=>{
+    const td=document.createElement('td'),isRemarks=field==='remarks';
+    const input=document.createElement(isRemarks?'textarea':'input');
+    input.type=field==='date'?'date':'text';input.value=row[field]||'';input.dataset.field=field;
+    input.oninput=()=>{row[field]=input.value};td.appendChild(input);tr.appendChild(td);
+  });
+  const photoTd=document.createElement('td');photoTd.className='photo-box';
+  photoTd.innerHTML=`<input type="file" accept="image/*" multiple><div class="thumbs"></div>`;
+  const thumbs=photoTd.querySelector('.thumbs');
+  const drawThumbs=()=>{thumbs.innerHTML=(row.photoDataUrls||[]).map(src=>`<img src="${esc(src)}" alt="">`).join('')};
+  drawThumbs();
+  photoTd.querySelector('input').onchange=async e=>{
+    const files=Array.from(e.target.files||[]).slice(0,3);
+    setStatus($('#formStatus'),'Compression des photos…','warn');
+    try{for(const f of files)row.photoDataUrls.push(await compressImage(f));drawThumbs();setStatus($('#formStatus'),'Photos ajoutées.','ok')}
+    catch(err){setStatus($('#formStatus'),'Erreur photo: '+err.message,'err')}
+    e.target.value='';
+  };
+  tr.appendChild(photoTd);
+  const act=document.createElement('td');act.innerHTML='<button type="button" class="danger">×</button>';
+  act.querySelector('button').onclick=()=>{const arr=draft.sections[key].rows;const pos=arr.indexOf(row);if(pos>=0)arr.splice(pos,1);tr.remove()};
+  tr.appendChild(act);return tr;
+}
+function collect(){
+  const r=normalizeReport(draft);
+  r.reportNo=$('#reportNo').value.trim();r.site=$('#site').value.trim();r.mainDate=$('#mainDate').value;
+  r.period=$('#period').value.trim();r.operators=$('#operators').value.trim();r.planning=$('#planning').value.trim();
+  r.updatedAt=new Date().toISOString();return r;
+}
+function compressImage(file,max=1000,quality=.55){
+  return new Promise((resolve,reject)=>{
+    const fr=new FileReader();fr.onerror=()=>reject(new Error('Lecture impossible'));fr.onload=()=>{
+      const img=new Image();img.onerror=()=>reject(new Error('Image invalide'));img.onload=()=>{
+        const scale=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');
+        c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+        resolve(c.toDataURL('image/jpeg',quality));
+      };img.src=fr.result;
+    };fr.readAsDataURL(file);
+  });
+}
+
+function upsertLocal(r){
+  const n=normalizeReport(r),i=reports.findIndex(x=>reportKey(x)===reportKey(n)||x.reportNo&&x.reportNo===n.reportNo);
+  if(i>=0)reports[i]=n;else reports.unshift(n);reports.sort(sortReports);writeJson(LS_REPORTS,reports);current=n;draft=clone(n);renderHistory();updateStats();
+}
+function sortReports(a,b){return String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||''))}
+function mergeCloud(cloud){
+  const m=new Map();reports.forEach(r=>m.set(reportKey(r),normalizeReport(r)));
+  (cloud||[]).forEach(r=>{const n=normalizeReport(r);n.source='cloud';m.set(reportKey(n),n)});
+  reports=Array.from(m.values()).sort(sortReports);writeJson(LS_REPORTS,reports);
+}
+function jsonp(action,params={}){
+  return new Promise((resolve,reject)=>{
+    const base=(settings.apiUrl||'').trim();if(!base)return reject(new Error('Apps Script URL manquant'));
+    const cb='cb_'+Date.now()+'_'+Math.random().toString(16).slice(2),url=new URL(base);
+    url.searchParams.set('action',action);url.searchParams.set('callback',cb);Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+    const s=document.createElement('script');const t=setTimeout(()=>done(new Error('Timeout Apps Script')),25000);
+    window[cb]=data=>done(null,data);s.onerror=()=>done(new Error('Connexion impossible'));
+    function done(err,data){clearTimeout(t);delete window[cb];s.remove();err?reject(err):resolve(data)}
+    s.src=url.toString();document.body.appendChild(s);
+  });
+}
+function postNoCors(action,payload){
+  const body=new URLSearchParams({action,payload:JSON.stringify(payload)});
+  return fetch(settings.apiUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body});
+}
+async function syncReports(statusNode=$('#globalStatus')){
+  settings.apiUrl=$('#apiUrl').value.trim();writeJson(LS_SETTINGS,settings);
+  setStatus(statusNode,'Connexion à Google Sheets…','warn');
+  try{
+    const setup=await jsonp('setup');if(!setup||!setup.ok)throw new Error(setup?.error||'Setup refusé');
+    const res=await jsonp('listReports',{limit:500});if(!res||!res.ok)throw new Error(res?.error||'Lecture refusée');
+    mergeCloud(res.reports||[]);renderHistory();updateStats();
+    setStatus(statusNode,`Sync OK: ${(res.reports||[]).length} rapports récupérés depuis Google Sheets.`,'ok');
+    return res.reports||[];
+  }catch(err){setStatus(statusNode,'Erreur Sync: '+err.message,'err');throw err}
+}
+async function refreshNumber(){
+  if(draft.reportNo)return;
+  $('#reportNo').value='RPT-'+today().replaceAll('-','')+'-001';
+  try{const r=await jsonp('nextNumber');if(r?.ok&&r.nextNumber){draft.reportNo=r.nextNumber;$('#reportNo').value=r.nextNumber}}catch(_){}
+}
+async function saveReport(e){
+  e.preventDefault();const r=collect();
+  if(!r.site||!r.mainDate){setStatus($('#formStatus'),'Centre et date obligatoires.','err');return}
+  if(!r.reportNo)r.reportNo=$('#reportNo').value||'RPT-'+Date.now();
+  upsertLocal(r);renderPreview(r);switchPanel('previewPanel');
+  setStatus($('#formStatus'),'Sauvegarde locale OK. Envoi vers Google Sheets…','warn');
+  try{
+    await postNoCors('saveReport',r);
+    setStatus($('#formStatus'),'Envoi effectué. Vérification Google Sheets…','warn');
+    await new Promise(x=>setTimeout(x,1800));
+    await syncReports($('#formStatus'));
+    const found=reports.find(x=>x.uid===r.uid||x.reportNo===r.reportNo);
+    if(found){current=found;renderPreview(found)}
+  }catch(err){setStatus($('#formStatus'),'Rapport gardé localement. Erreur Cloud: '+err.message,'err')}
+}
+function newReport(){
+  draft=emptyReport();current=draft;renderForm(draft);refreshNumber();setStatus($('#formStatus'),'Nouveau rapport prêt.','ok');switchPanel('formPanel');
+}
+function editReport(index){
+  const r=window.filteredReports[index];if(!r)return;renderForm(r);setStatus($('#formStatus'),'Rapport chargé pour modification.','ok');switchPanel('formPanel');
+}
+function viewReport(index){const r=window.filteredReports[index];if(!r)return;current=r;renderPreview(r);switchPanel('previewPanel')}
+function removeLocal(index){
+  const r=window.filteredReports[index];if(!r||!confirm('Masquer ce rapport localement ? Il restera dans Google Sheets.'))return;
+  reports=reports.filter(x=>reportKey(x)!==reportKey(r));writeJson(LS_REPORTS,reports);renderHistory();updateStats();
+}
+function renderHistory(){
+  const q=($('#search').value||'').toLowerCase().trim(),m=$('#monthFilter').value||'';
+  const filtered=reports.filter(r=>{const h=`${r.reportNo||''} ${r.site||''} ${r.operators||''} ${r.period||''}`.toLowerCase();return(!q||h.includes(q))&&(!m||String(r.mainDate||'').startsWith(m))});
+  window.filteredReports=filtered;const box=$('#history');
+  if(!filtered.length){box.innerHTML='<div class="empty">Aucun rapport. Clique « Actualiser depuis Google Sheets ».</div>';return}
+  box.innerHTML=filtered.map((r,i)=>`<article class="history-item">
+    <div class="history-title"><h3>${esc(r.reportNo||'Rapport')}</h3>${r.sheetUrl?`<a href="${esc(r.sheetUrl)}" target="_blank" rel="noopener">Google Sheet</a>`:''}</div>
+    <div class="meta"><span class="badge">${esc(dateFr(r.mainDate))}</span><span class="badge">${esc(r.site||'Centre vide')}</span><span class="badge">${esc(r.operators||'')}</span><span class="badge">${esc(r.source||'local')}</span></div>
+    <div class="actions"><button type="button" onclick="viewReport(${i})">Voir</button><button class="secondary" type="button" onclick="editReport(${i})">Modifier</button><button class="light" type="button" onclick="removeLocal(${i})">Masquer local</button></div>
+  </article>`).join('');
+}
+function rowHasData(key,row){
+  const fields=DEFINITIONS[key].fields.map(x=>x[0]).filter(x=>!['service','date'].includes(x));
+  return fields.some(f=>String(row[f]||'').trim())||(row.photoDataUrls||[]).length>0;
+}
+function renderPreview(r){
+  const n=normalizeReport(r);let html=`<h2>Rapport de Maintenance</h2>
+  <table><tr><th>Centre</th><td>${esc(n.site)}</td><th>Date</th><td>${esc(dateFr(n.mainDate))}</td></tr>
+  <tr><th>Période</th><td>${esc(n.period)}</td><th>Opérateurs</th><td>${esc(n.operators)}</td></tr></table>`;
+  ORDER.forEach(k=>{
+    const def=DEFINITIONS[k],rows=n.sections[k].rows.filter(row=>rowHasData(k,row));if(!rows.length)return;
+    html+=`<div class="pv-title">${esc(def.title)}</div><div class="table-wrap"><table><thead><tr>${def.fields.map(f=>`<th>${esc(f[1])}</th>`).join('')}<th>Photos</th></tr></thead><tbody>`;
+    rows.forEach(row=>{html+='<tr>'+def.fields.map(([f])=>`<td>${esc(f==='date'?dateFr(row[f]):row[f]||'')}</td>`).join('')+`<td>${(row.photoDataUrls||[]).map(src=>`<img src="${esc(src)}" style="width:55px;height:55px;object-fit:cover;margin:2px">`).join('')}</td></tr>`});
+    html+='</tbody></table></div>';
+  });
+  $('#preview').className='preview';$('#preview').innerHTML=html;
+}
+function updateStats(){
+  $('#statTotal').textContent=reports.length;$('#statCloud').textContent=reports.filter(r=>r.source==='cloud'||r.sheetUrl).length;
+  const m=today().slice(0,7);$('#statMonth').textContent=reports.filter(r=>String(r.mainDate||'').startsWith(m)).length;
+}
+function saveSettings(){
+  settings={apiUrl:$('#apiUrl').value.trim(),defaultOperator:$('#defaultOperator').value.trim()};writeJson(LS_SETTINGS,settings);setStatus($('#globalStatus'),'Réglages enregistrés.','ok');
+}
+async function clearOldWorkers(){
+  try{if('serviceWorker'in navigator){const regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(r=>r.unregister()))}
+  if('caches'in window){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)))}}catch(_){}
+}
+async function init(){
+  await clearOldWorkers();
+  $('#apiUrl').value=settings.apiUrl||DEFAULT_API;$('#defaultOperator').value=settings.defaultOperator||'';
+  reports=(Array.isArray(reports)?reports:[]).map(normalizeReport).sort(sortReports);writeJson(LS_REPORTS,reports);
+  renderForm(draft);renderHistory();updateStats();refreshNumber();
+  setStatus($('#globalStatus'),'Interface propre chargée. Récupération de l’archive Google Sheets…','warn');
+  try{await syncReports($('#globalStatus'))}catch(_){}
+}
+
+$$('.tab').forEach(b=>b.onclick=()=>switchPanel(b.dataset.panel));
+$('#saveSettings').onclick=saveSettings;$('#syncTop').onclick=()=>syncReports($('#globalStatus'));
+$('#syncHistory').onclick=()=>syncReports($('#historyStatus'));$('#reportForm').onsubmit=saveReport;
+$('#newBtn').onclick=newReport;$('#previewBtn').onclick=()=>{current=collect();renderPreview(current);switchPanel('previewPanel')};
+$('#search').oninput=renderHistory;$('#monthFilter').oninput=renderHistory;$('#printBtn').onclick=()=>window.print();
+$('#editPreviewBtn').onclick=()=>{if(current){renderForm(current);switchPanel('formPanel')}};
+$('#mainDate').onchange=()=>{if(!$('#period').value)$('#period').value=monthText($('#mainDate').value);ORDER.forEach(k=>draft.sections[k].rows.forEach(r=>{if(!r.date)r.date=$('#mainDate').value}));renderForm(draft)};
+window.viewReport=viewReport;window.editReport=editReport;window.removeLocal=removeLocal;
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
