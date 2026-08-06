@@ -59,6 +59,33 @@
     return found;
   }
 
+  function ensureRecoveryUi() {
+    if (document.querySelector('#recoverLocalBtn')) return;
+    const historyCard = document.querySelector('#historyTab .card');
+    if (!historyCard) return;
+
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.flexWrap = 'wrap';
+    row.style.alignItems = 'center';
+    row.style.gap = '10px';
+    row.style.margin = '0 0 14px';
+
+    const button = document.createElement('button');
+    button.id = 'recoverLocalBtn';
+    button.type = 'button';
+    button.className = 'secondary';
+    button.textContent = 'Récupérer anciens rapports';
+
+    const status = document.createElement('p');
+    status.id = 'recoveryStatus';
+    status.className = 'status';
+    status.style.margin = '0';
+
+    row.append(button, status);
+    historyCard.prepend(row);
+  }
+
   function recoverLocalReports(showMessage = false) {
     let canonical = [];
     try {
@@ -75,7 +102,8 @@
     });
 
     const merged = Array.from(map.values()).sort((a, b) => reportTime(b) - reportTime(a));
-    const added = Math.max(0, merged.length - canonical.length);
+    const beforeKeys = new Set(canonical.map(reportKey));
+    const added = merged.filter(report => !beforeKeys.has(reportKey(report))).length;
 
     if (merged.length) {
       localStorage.setItem(CANONICAL_KEY, JSON.stringify(merged));
@@ -85,13 +113,14 @@
     }
 
     if (showMessage) {
+      ensureRecoveryUi();
       const status = document.querySelector('#recoveryStatus');
       if (status) {
         status.textContent = added > 0
           ? `Récupération terminée : ${added} ancien(s) rapport(s) retrouvé(s).`
           : merged.length > 0
             ? `Aucun rapport supplémentaire. ${merged.length} rapport(s) local(aux) sont déjà présents.`
-            : 'Aucun rapport local trouvé sur ce navigateur. Il faut alors les récupérer depuis Google Sheets avec Sync.';
+            : 'Aucun rapport local trouvé dans ce navigateur. Il faut les récupérer depuis Google Sheets avec Sync.';
         status.className = `status ${merged.length ? 'ok' : 'warn'}`;
       }
     }
@@ -102,6 +131,7 @@
   window.recoverLocalReportsV20 = () => recoverLocalReports(true);
 
   document.addEventListener('DOMContentLoaded', () => {
+    ensureRecoveryUi();
     recoverLocalReports(false);
     document.querySelector('#recoverLocalBtn')?.addEventListener('click', () => recoverLocalReports(true));
   });
