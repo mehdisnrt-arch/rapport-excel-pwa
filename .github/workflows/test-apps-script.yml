@@ -9,18 +9,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Test ping and JSONP
+      - name: Test archive count and POST setup
         shell: bash
         run: |
           set -o pipefail
           URL='https://script.google.com/macros/s/AKfycbxI66qHAU91KW4YP0KjQqkiMFX8WbzQ3cRqXmASemOpcSV2HVi6OeeZoKA4qJFKSyI0sg/exec'
-          echo '=== PING HEADERS ==='
-          curl -sS -L -D - "$URL?action=ping" -o /tmp/ping-body.txt || true
-          echo '=== PING BODY ==='
-          head -c 2000 /tmp/ping-body.txt || true
-          echo
-          echo '=== JSONP HEADERS ==='
-          curl -sS -L -D - "$URL?action=ping&callback=testCallback" -o /tmp/jsonp-body.txt || true
-          echo '=== JSONP BODY ==='
-          head -c 2000 /tmp/jsonp-body.txt || true
-          echo
+          curl -sS -L "$URL?action=listReports&limit=500" -o /tmp/list.json
+          python3 - <<'PY'
+          import json
+          with open('/tmp/list.json', encoding='utf-8') as f:
+              data=json.load(f)
+          print('OK=',data.get('ok'))
+          print('VERSION=',data.get('version'))
+          print('REPORT_COUNT=',len(data.get('reports') or []))
+          PY
+          curl -sS -L -X POST -H 'Content-Type: application/x-www-form-urlencoded;charset=UTF-8' --data 'action=setup' "$URL" -o /tmp/post.json
+          python3 - <<'PY'
+          import json
+          with open('/tmp/post.json', encoding='utf-8') as f:
+              data=json.load(f)
+          print('POST_OK=',data.get('ok'))
+          print('POST_VERSION=',data.get('version'))
+          PY
