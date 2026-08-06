@@ -1,0 +1,3 @@
+Stable clean rebuild v2
+Commit before marker: f817f6acf36446a39fee4b14feee3afe99e2a227
+Includes reliable v2 wrapper and Apps Script archive recovery v16.
