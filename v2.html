@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Rapports de Mission v2</title>
+<style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f1f5f9}iframe{width:100%;height:100%;border:0;display:block}</style>
+</head>
+<body>
+<iframe id="app" src="clean.html?v=2" title="Rapports de Mission"></iframe>
+<script>
+'use strict';
+const PATCH = String.raw`
+(function applyReliableCloudPatch(){
+  const versionNode=document.querySelector('.version');
+  if(versionNode)versionNode.textContent='Clean rebuild v2 — sauvegarde fiable + archive Cloud';
+
+  apiGet=async function(action,params={}){
+    const base=(settings.apiUrl||'').trim();if(!base)throw new Error('Apps Script URL manquant');
+    const url=new URL(base);url.searchParams.set('action',action);url.searchParams.set('_t',Date.now());
+    Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+    try{
+      const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),30000);
+      const response=await fetch(url.toString(),{method:'GET',cache:'no-store',redirect:'follow',signal:controller.signal});
+      clearTimeout(timer);if(!response.ok)throw new Error('HTTP '+response.status);
+      return JSON.parse(await response.text());
+    }catch(fetchError){
+      try{return await jsonp(action,params)}catch(jsonpError){throw new Error(jsonpError.message||fetchError.message||'Connexion impossible')}
+    }
+  };
+
+  postViaForm=function(action,payload){
+    return new Promise((resolve,reject)=>{
+      const base=(settings.apiUrl||'').trim();if(!base)return reject(new Error('Apps Script URL manquant'));
+      const frameName='gas_post_'+Date.now()+'_'+Math.random().toString(16).slice(2);
+      const iframe=document.createElement('iframe');iframe.name=frameName;iframe.hidden=true;
+      const form=document.createElement('form');form.method='POST';form.action=base;form.target=frameName;form.hidden=true;
+      [['action',action],['payload',JSON.stringify(payload)]].forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)});
+      let submitted=false,finished=false;
+      const cleanup=()=>setTimeout(()=>{iframe.remove();form.remove()},1000);
+      const done=()=>{if(finished)return;finished=true;cleanup();resolve()};
+      iframe.onload=()=>{if(submitted)done()};iframe.onerror=()=>{if(!finished){finished=true;cleanup();reject(new Error('Envoi impossible'))}};
+      document.body.appendChild(iframe);document.body.appendChild(form);submitted=true;form.submit();setTimeout(done,8000);
+    });
+  };
+
+  syncReports=async function(statusNode=document.querySelector('#globalStatus')){
+    settings.apiUrl=document.querySelector('#apiUrl').value.trim();writeJson(LS_SETTINGS,settings);
+    setStatus(statusNode,'Connexion à Google Sheets…','warn');
+    try{
+      const setup=await apiGet('setup');if(!setup||!setup.ok)throw new Error(setup?.error||'Setup refusé');
+      const res=await apiGet('listReports',{limit:500});if(!res||!res.ok)throw new Error(res?.error||'Lecture refusée');
+      mergeCloud(res.reports||[]);renderHistory();updateStats();
+      const count=(res.reports||[]).length;
+      const note=count===4?' — Google DB contient actuellement 4; le correctif Archive v16 ajoutera les 3 anciennes feuilles.':'';
+      setStatus(statusNode,'Sync OK: '+count+' rapports Cloud, '+reports.length+' visibles au total.'+note,'ok');
+      return res.reports||[];
+    }catch(err){setStatus(statusNode,'Erreur Sync: '+err.message,'err');throw err}
+  };
+
+  refreshNumber=async function(){
+    if(draft.reportNo)return;
+    document.querySelector('#reportNo').value='RPT-'+today().replaceAll('-','')+'-001';
+    try{const r=await apiGet('nextNumber');if(r?.ok&&r.nextNumber){draft.reportNo=r.nextNumber;document.querySelector('#reportNo').value=r.nextNumber}}catch(_){}
+  };
+
+  saveReport=async function(e){
+    e.preventDefault();const r=collect();
+    if(!r.site||!r.mainDate){setStatus(document.querySelector('#formStatus'),'Centre et date obligatoires.','err');return}
+    if(!r.reportNo)r.reportNo=document.querySelector('#reportNo').value||'RPT-'+Date.now();
+    upsertLocal(r);renderPreview(r);renderHistory();updateStats();switchPanel('historyPanel');
+    setStatus(document.querySelector('#historyStatus'),'Rapport enregistré localement et visible. Envoi vers Google Sheets…','warn');
+    try{
+      await postViaForm('saveReport',r);
+      let confirmed=null;
+      for(let attempt=1;attempt<=10;attempt+=1){
+        setStatus(document.querySelector('#historyStatus'),'Vérification Google Sheets '+attempt+'/10…','warn');
+        await new Promise(resolve=>setTimeout(resolve,3000));
+        try{
+          const cloud=await apiGet('listReports',{limit:500});
+          if(cloud?.ok){mergeCloud(cloud.reports||[]);renderHistory();updateStats();confirmed=(cloud.reports||[]).find(x=>x.uid===r.uid||x.reportNo===r.reportNo);if(confirmed)break}
+        }catch(_){}
+      }
+      if(confirmed){current=normalizeReport(confirmed);renderPreview(current);setStatus(document.querySelector('#historyStatus'),'Rapport confirmé dans Google Sheets.','ok')}
+      else{setStatus(document.querySelector('#historyStatus'),'Rapport reste visible localement. Google Sheets ne l’a pas encore confirmé; clique Actualiser.','warn')}
+    }catch(err){setStatus(document.querySelector('#historyStatus'),'Rapport gardé localement. Erreur Cloud: '+err.message,'err')}
+  };
+
+  document.querySelector('#reportForm').onsubmit=saveReport;
+  document.querySelector('#syncTop').onclick=()=>syncReports(document.querySelector('#globalStatus'));
+  document.querySelector('#syncHistory').onclick=()=>syncReports(document.querySelector('#historyStatus'));
+  setStatus(document.querySelector('#globalStatus'),'Version v2 chargée. Synchronisation fiable…','warn');
+  syncReports(document.querySelector('#globalStatus')).catch(()=>{});
+})();`;
+
+const frame=document.getElementById('app');
+frame.addEventListener('load',()=>{
+  try{
+    const script=frame.contentDocument.createElement('script');script.textContent=PATCH;frame.contentDocument.body.appendChild(script);
+  }catch(error){console.error(error)}
+});
+</script>
+</body>
+</html>
